@@ -21,7 +21,7 @@ ScreenGui.Name = "LQDSOFT_GUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = targetParent
 
--- Текст подсказки сверху посередине
+-- Текст подсказки сверху посередине (Яркий неоновый цвет)
 local TopHint = Instance.new("TextLabel")
 TopHint.Name = "TopHint"
 TopHint.Size = UDim2.new(0, 300, 0, 30)
@@ -34,7 +34,7 @@ TopHint.Font = Enum.Font.SourceSansBold
 TopHint.Visible = false
 TopHint.Parent = ScreenGui
 
--- Круглая желтая кнопка "G" снизу слева
+-- Круглая желтая кнопка "G" снизу слева для телефонов
 local MobileOpenBtn = Instance.new("TextButton")
 MobileOpenBtn.Name = "MobileOpenBtn"
 MobileOpenBtn.Size = UDim2.new(0, 65, 0, 65)
@@ -50,11 +50,11 @@ MobileOpenBtn.Parent = ScreenGui
 local ButtonCorner = Instance.new("UICorner")
 ButtonCorner.CornerRadius = UDim.new(1, 0)
 ButtonCorner.Parent = MobileOpenBtn
--- Компактный ровный контейнер меню 310х240
+-- Идеально ровный контейнер меню (Высота увеличена до 270 для новой кнопки)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 310, 0, 240)
-MainFrame.Position = UDim2.new(0.5, -155, 0.5, -120)
+MainFrame.Size = UDim2.new(0, 310, 0, 270)
+MainFrame.Position = UDim2.new(0.5, -155, 0.5, -135)
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 MainFrame.BorderSizePixel = 0
 MainFrame.Visible = true
@@ -116,10 +116,22 @@ EspBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 EspBtn.Font = Enum.Font.SourceSansBold
 EspBtn.TextSize = 14
 EspBtn.Parent = MainFrame
+
+-- ДОБАВЛЕНО: Кнопка включения Анти-АФК в меню
+local AntiAfkBtn = Instance.new("TextButton")
+AntiAfkBtn.Name = "AntiAfkBtn"
+AntiAfkBtn.Size = UDim2.new(1, -20, 0, 32)
+AntiAfkBtn.Position = UDim2.new(0, 10, 0, 130)
+AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
+AntiAfkBtn.Text = "Анти АФК: ВЫКЛ"
+AntiAfkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+AntiAfkBtn.Font = Enum.Font.SourceSansBold
+AntiAfkBtn.TextSize = 14
+AntiAfkBtn.Parent = MainFrame
 local DelayLabel = Instance.new("TextLabel")
 DelayLabel.Name = "DelayLabel"
 DelayLabel.Size = UDim2.new(0, 35, 0, 30)
-DelayLabel.Position = UDim2.new(0, 10, 0, 130)
+DelayLabel.Position = UDim2.new(0, 10, 0, 168)
 DelayLabel.BackgroundTransparency = 1
 DelayLabel.Text = "2.0"
 DelayLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -130,7 +142,7 @@ DelayLabel.Parent = MainFrame
 local MinusBtn = Instance.new("TextButton")
 MinusBtn.Name = "MinusBtn"
 MinusBtn.Size = UDim2.new(0, 26, 0, 26)
-MinusBtn.Position = UDim2.new(0, 48, 0, 132)
+MinusBtn.Position = UDim2.new(0, 48, 0, 170)
 MinusBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
 MinusBtn.Text = "-"
 MinusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -141,7 +153,7 @@ MinusBtn.Parent = MainFrame
 local PlusBtn = Instance.new("TextButton")
 PlusBtn.Name = "PlusBtn"
 PlusBtn.Size = UDim2.new(0, 26, 0, 26)
-PlusBtn.Position = UDim2.new(0, 80, 0, 132)
+PlusBtn.Position = UDim2.new(0, 80, 0, 170)
 PlusBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
 PlusBtn.Text = "+"
 PlusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -152,7 +164,7 @@ PlusBtn.Parent = MainFrame
 local RectangleLabel = Instance.new("TextLabel")
 RectangleLabel.Name = "NormLabel"
 RectangleLabel.Size = UDim2.new(0, 80, 0, 30)
-RectangleLabel.Position = UDim2.new(0, 115, 0, 130)
+RectangleLabel.Position = UDim2.new(0, 115, 0, 168)
 RectangleLabel.BackgroundTransparency = 1
 RectangleLabel.Text = "2.0 норм"
 RectangleLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
@@ -164,7 +176,7 @@ RectangleLabel.Parent = MainFrame
 local FixSpawnBtn = Instance.new("TextButton")
 FixSpawnBtn.Name = "FixSpawnBtn"
 FixSpawnBtn.Size = UDim2.new(0, 120, 0, 28)
-FixSpawnBtn.Position = UDim2.new(0, 10, 0, 168)
+FixSpawnBtn.Position = UDim2.new(0, 10, 0, 202)
 FixSpawnBtn.BackgroundColor3 = Color3.fromRGB(230, 120, 30)
 FixSpawnBtn.Text = "Исправить спавн"
 FixSpawnBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -175,7 +187,7 @@ FixSpawnBtn.Parent = MainFrame
 local DestroyBtn = Instance.new("TextButton")
 DestroyBtn.Name = "DestroyBtn"
 DestroyBtn.Size = UDim2.new(0, 120, 0, 28)
-DestroyBtn.Position = UDim2.new(0, 10, 0, 202)
+DestroyBtn.Position = UDim2.new(0, 10, 0, 235)
 DestroyBtn.BackgroundColor3 = Color3.fromRGB(120, 30, 30)
 DestroyBtn.Text = "Выгрузить чит"
 DestroyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -185,13 +197,14 @@ DestroyBtn.Parent = MainFrame
 
 local autofarmActive = false
 local espActive = false
+local antiAfkActive = false -- Переключатель Анти-АФК
 local currentDelay = 2.0
 local scriptRunning = true
 
 local goldTracker = Instance.new("TextLabel")
 goldTracker.Name = "GoldTracker"
 goldTracker.Size = UDim2.new(0, 130, 0, 25)
-goldTracker.Position = UDim2.new(1, -145, 0, 168)
+goldTracker.Position = UDim2.new(1, -145, 0, 202)
 goldTracker.BackgroundTransparency = 1
 goldTracker.Text = "Золото/ч: 0"
 goldTracker.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -203,7 +216,7 @@ goldTracker.Parent = MainFrame
 local goldPerMinTracker = Instance.new("TextLabel")
 goldPerMinTracker.Name = "GoldPerMinTracker"
 goldPerMinTracker.Size = UDim2.new(0, 130, 0, 25)
-goldPerMinTracker.Position = UDim2.new(1, -145, 0, 195)
+goldPerMinTracker.Position = UDim2.new(1, -145, 0, 228)
 goldPerMinTracker.BackgroundTransparency = 1
 goldPerMinTracker.Text = "Золото/мин: 0"
 goldPerMinTracker.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -211,39 +224,6 @@ goldPerMinTracker.TextSize = 14
 goldPerMinTracker.Font = Enum.Font.SourceSansBold
 goldPerMinTracker.TextXAlignment = Enum.TextXAlignment.Left
 goldPerMinTracker.Parent = MainFrame
-
-local function setGuiVisible(state)
-    MainFrame.Visible = state
-    TopHint.Visible = not state
-    MobileOpenBtn.Visible = not state
-end
-
-CloseBtn.MouseButton1Click:Connect(function() setGuiVisible(false) end)
-MobileOpenBtn.MouseButton1Click:Connect(function() setGuiVisible(true) end)
-
-local inputConnection
-inputConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not scriptRunning then if inputConnection then inputConnection:Disconnect() end return end
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
-        setGuiVisible(not MainFrame.Visible)
-    end
-end)
-
-MinusBtn.MouseButton1Click:Connect(function()
-    if currentDelay > 0.1 then
-        currentDelay = math.round((currentDelay - 0.1) * 10) / 10
-        DelayLabel.Text = tostring(currentDelay)
-        RectangleLabel.Text = tostring(currentDelay) .. " норм"
-    end
-end)
-
-PlusBtn.MouseButton1Click:Connect(function()
-    if currentDelay < 5.0 then
-        currentDelay = math.round((currentDelay + 0.1) * 10) / 10
-        DelayLabel.Text = tostring(currentDelay)
-        RectangleLabel.Text = tostring(currentDelay) .. " норм"
-    end
-end)
 
 -- Таймер на 20 секунд со сбросом
 task.spawn(function()
@@ -267,6 +247,39 @@ task.spawn(function()
         end
     end
 end)
+local function setGuiVisible(state)
+    MainFrame.Visible = state
+    TopHint.Visible = not state
+    MobileOpenBtn.Visible = not state
+end
+
+CloseBtn.MouseButton1Click:Connect(function() setGuiVisible(false) end)
+MobileOpenBtn.MouseButton1Click:Connect(function() setGuiVisible(true) end)
+
+MinusBtn.MouseButton1Click:Connect(function()
+    if currentDelay > 0.1 then
+        currentDelay = math.round((currentDelay - 0.1) * 10) / 10
+        DelayLabel.Text = tostring(currentDelay)
+        RectangleLabel.Text = tostring(currentDelay) .. " норм"
+    end
+end)
+
+PlusBtn.MouseButton1Click:Connect(function()
+    if currentDelay < 5.0 then
+        currentDelay = math.round((currentDelay + 0.1) * 10) / 10
+        DelayLabel.Text = tostring(currentDelay)
+        RectangleLabel.Text = tostring(currentDelay) .. " норм"
+    end
+end)
+
+local inputConnection
+inputConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not scriptRunning then if inputConnection then inputConnection:Disconnect() end return end
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
+        setGuiVisible(not MainFrame.Visible)
+    end
+end)
+
 local function executeCharacterReset()
     local char = LocalPlayer.Character
     local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -284,14 +297,18 @@ local function clearAllEsp()
     end
 end
 
+local antiAfkConnection
+
 DestroyBtn.MouseButton1Click:Connect(function()
     scriptRunning = false
     autofarmActive = false
     espActive = false
+    antiAfkActive = false
     clearAllEsp()
     local camera = Workspace.CurrentCamera
     if camera then camera.CameraType = Enum.CameraType.Custom end
     if inputConnection then inputConnection:Disconnect() end
+    if antiAfkConnection then antiAfkConnection:Disconnect() end
     ScreenGui:Destroy()
 end)
 
@@ -334,7 +351,7 @@ task.spawn(function()
                             espGui.Name = "LqdEspGui"
                             espGui.Size = UDim2.new(0, 200, 0, 40)
                             espGui.AlwaysOnTop = true
-                            espGui.ExtentsOffset = Vector3.new(0, 2.5, 0)
+                            pcall(function() espGui.ExtentsOffset = Vector3.new(0, 2.5, 0) end)
                             espGui.Parent = player.Character
                             local textLabel = Instance.new("TextLabel")
                             textLabel.Name = "EspText"
@@ -370,20 +387,15 @@ EspBtn.MouseButton1Click:Connect(function()
         clearAllEsp()
     end
 end)
-
--- Функция бесшовной мгновенной фиксации кадра
 local function forceMoveFrame(targetCFrame)
     local char = LocalPlayer.Character
     local root = char and char:FindFirstChild("HumanoidRootPart")
     local camera = Workspace.CurrentCamera
-    
     if root and targetCFrame and autofarmActive and scriptRunning then
         if camera then
             camera.CameraType = Enum.CameraType.Scriptable
             camera.CFrame = CFrame.new(targetCFrame.Position + Vector3.new(0, 15, 25), targetCFrame.Position)
         end
-        
-        -- Удерживаем персонажа на каждом тике кадра игры
         local duration = currentDelay
         local startTime = tick()
         while tick() - startTime < duration do
@@ -393,39 +405,61 @@ local function forceMoveFrame(targetCFrame)
             if camera then
                 camera.CFrame = CFrame.new(targetCFrame.Position + Vector3.new(0, 15, 25), targetCFrame.Position)
             end
-            RunService.Heartbeat:Wait() -- Ивент синхронизации кадра (Обойти блокировки while)
+            RunService.Heartbeat:Wait()
         end
     end
 end
 
--- СВЕРХМОЩНЫЙ ИВЕНТОВЫЙ ДВИЖОК АВТОФАРМА
+local function getPhysicalStages()
+    local stages = {}
+    for _, desc in pairs(Workspace:GetDescendants()) do
+        if desc:IsA("BasePart") and (desc.Name == "DarknessPart" or desc.Name == "Trigger" or desc.Name:lower():find("stage")) then
+            if desc.Parent and (desc.Parent.Name:lower():find("stage") or desc.Parent.Name:lower():find("zone")) then
+                table.insert(stages, desc)
+            end
+        end
+    end
+    table.sort(stages, function(a, b)
+        return a.Position.Z < b.Position.Z
+    end)
+    return stages
+end
+
 task.spawn(function()
     while scriptRunning do
         task.wait(0.1)
-        
         if autofarmActive and scriptRunning then
             local char = LocalPlayer.Character
             local hum = char and char:FindFirstChildOfClass("Humanoid")
             local root = char and char:FindFirstChild("HumanoidRootPart")
-            
             if char and hum and hum.Health > 0 and root then
-                -- Считываем стадии через прямую проверку Workspace
-                local boatStages = Workspace:FindFirstChild("BoatStages")
-                local normalStages = boatStages and (boatStages:FindFirstChild("NormalStages") or boatStages)
                 
-                if normalStages then
-                    for i = 1, 10 do
+                local mapStages = getPhysicalStages()
+                
+                if #mapStages > 0 then
+                    local count = 0
+                    for _, stagePart in pairs(mapStages) do
                         if not autofarmActive or not scriptRunning or hum.Health <= 0 then break end
-                        local stage = normalStages:FindFirstChild("CaveStage" .. i) or normalStages:FindFirstChild("Stage" .. i)
-                        local trigger = stage and (stage:FindFirstChild("DarknessPart") or stage:FindFirstChild("Trigger"))
+                        if count >= 10 then break end
                         
-                        if trigger then
-                            forceMoveFrame(trigger.CFrame)
+                        if stagePart and stagePart.Parent then
+                            forceMoveFrame(stagePart.CFrame)
+                            count = count + 1
+                        end
+                    end
+                else
+                    local boatStages = Workspace:FindFirstChild("BoatStages") or Workspace:FindFirstChild("Stages")
+                    local normalStages = boatStages and (boatStages:FindFirstChild("NormalStages") or boatStages)
+                    if normalStages then
+                        for i = 1, 10 do
+                            if not autofarmActive or not scriptRunning or hum.Health <= 0 then break end
+                            local stage = normalStages:FindFirstChild("CaveStage" .. i) or normalStages:FindFirstChild("Stage" .. i)
+                            local trigger = stage and (stage:FindFirstChild("DarknessPart") or stage:FindFirstChild("Trigger"))
+                            if trigger then forceMoveFrame(trigger.CFrame) end
                         end
                     end
                 end
                 
-                -- Сбор финального сундука
                 local endZone = Workspace:FindFirstChild("TheEnd") or Workspace:FindFirstChild("End")
                 local chest = endZone and (endZone:FindFirstChild("GoldenChest") or endZone:FindFirstChild("Chest"))
                 local chestTop = chest and (chest:FindFirstChild("ChestTop") or chest:FindFirstChild("Main"))
@@ -468,6 +502,19 @@ FarmBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Логика переключения кнопки Анти-АФК
+AntiAfkBtn.MouseButton1Click:Connect(function()
+    if not scriptRunning then return end
+    antiAfkActive = not antiAfkActive
+    if antiAfkActive then
+        AntiAfkBtn.Text = "Анти АФК: ВКЛ"
+        AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(90, 200, 90)
+    else
+        AntiAfkBtn.Text = "Анти АФК: ВЫКЛ"
+        AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
+    end
+end)
+
 local dragging, dragInput, dragStart, startPos
 local function update(input)
     local delta = input.Position - dragStart
@@ -485,3 +532,14 @@ end)
 
 TopBar.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end end)
 UserInputService.InputChanged:Connect(function(input) if input == dragInput and dragging then update(input) end end)
+
+pcall(function()
+    antiAfkConnection = LocalPlayer.Idled:Connect(function()
+        if antiAfkActive then
+            local virtualUser = game:GetService("VirtualUser")
+            virtualUser:Button2Down(Vector2.new(0, 0), Workspace.CurrentCamera.CFrame)
+            task.wait(0.2)
+            virtualUser:Button2Up(Vector2.new(0, 0), Workspace.CurrentCamera.CFrame)
+        end
+    end)
+end)
