@@ -1,545 +1,321 @@
--- Сервисы Roblox
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local CoreGui = game:GetService("CoreGui")
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
+-- ==========================================
+-- ЧАСТЬ 1: СОЗДАНИЕ ИНТЕРФЕЙСА (UI)
+-- ==========================================
+_G.ScreenGui = Instance.new("ScreenGui")
+_G.MainFrame = Instance.new("Frame")
+_G.ToggleButton = Instance.new("TextButton")
+_G.UnloadButton = Instance.new("TextButton")
+_G.LangButton = Instance.new("TextButton")
+_G.CloseXButton = Instance.new("TextButton")
+_G.MobileMenuButton = Instance.new("TextButton")
+_G.TopHintLabel = Instance.new("TextLabel")
 
+local FrameStroke = Instance.new("UIStroke")
+local TitleLabel = Instance.new("TextLabel")
+local AuthorLabel = Instance.new("TextLabel")
+local MainCorner = Instance.new("UICorner")
+local MobileButtonCorner = Instance.new("UICorner")
+local TextButtonUIStroke = Instance.new("UIStroke")
+local ButtonGlowStroke = Instance.new("UIStroke")
+local TextShadow = Instance.new("UIStroke")
+
+_G.ScreenGui.Name = "PremiumAntiAFK_L1TEBRAY"
+_G.ScreenGui.Parent = game:GetService("CoreGui")
+_G.ScreenGui.ResetOnSpawn = false
+
+-- Главное окно меню (Glassmorphism)
+_G.MainFrame.Name = "MainFrame"
+_G.MainFrame.Parent = _G.ScreenGui
+_G.MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+_G.MainFrame.BackgroundTransparency = 0.15
+_G.MainFrame.Position = UDim2.new(0.5, -125, 0.4, -75)
+_G.MainFrame.Size = UDim2.new(0, 250, 0, 150)
+_G.MainFrame.Active = true
+_G.MainFrame.Draggable = true
+_G.MainFrame.BorderSizePixel = 0
+
+MainCorner.CornerRadius = UDim.new(0, 14)
+MainCorner.Parent = _G.MainFrame
+
+FrameStroke.Parent = _G.MainFrame
+FrameStroke.Color = Color3.fromRGB(60, 60, 75)
+FrameStroke.Thickness = 1.2
+FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+-- Главный заголовок
+TitleLabel.Name = "Title"
+TitleLabel.Parent = _G.MainFrame
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Position = UDim2.new(0, 16, 0, 10)
+TitleLabel.Size = UDim2.new(0, 150, 0, 16)
+TitleLabel.Font = Enum.Font.BuilderSansBold
+TitleLabel.Text = "antiafk universal"
+TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+TitleLabel.TextSize = 13
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Авторство (by L1TEBRAY)
+AuthorLabel.Name = "Author"
+AuthorLabel.Parent = _G.MainFrame
+AuthorLabel.BackgroundTransparency = 1
+AuthorLabel.Position = UDim2.new(0, 16, 0, 24)
+AuthorLabel.Size = UDim2.new(0, 150, 0, 12)
+AuthorLabel.Font = Enum.Font.BuilderSans
+AuthorLabel.Text = "by L1TEBRAY"
+AuthorLabel.TextColor3 = Color3.fromRGB(140, 140, 155)
+AuthorLabel.TextSize = 10
+AuthorLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Кнопка смены языка
+_G.LangButton.Name = "LangButton"
+_G.LangButton.Parent = _G.MainFrame
+_G.LangButton.BackgroundTransparency = 1
+_G.LangButton.Position = UDim2.new(1, -72, 0, 12)
+_G.LangButton.Size = UDim2.new(0, 30, 0, 22)
+_G.LangButton.Font = Enum.Font.BuilderSansBold
+_G.LangButton.Text = "EN"
+_G.LangButton.TextColor3 = Color3.fromRGB(140, 140, 155)
+_G.LangButton.TextSize = 12
+
+-- Крестик закрытия
+_G.CloseXButton.Name = "CloseXButton"
+_G.CloseXButton.Parent = _G.MainFrame
+_G.CloseXButton.BackgroundTransparency = 1
+_G.CloseXButton.Position = UDim2.new(1, -34, 0, 12)
+_G.CloseXButton.Size = UDim2.new(0, 22, 0, 22)
+_G.CloseXButton.Font = Enum.Font.BuilderSansBold
+_G.CloseXButton.Text = "×"
+_G.CloseXButton.TextColor3 = Color3.fromRGB(140, 140, 155)
+_G.CloseXButton.TextSize = 20
+
+-- Кнопка Статуса
+_G.ToggleButton.Name = "ToggleButton"
+_G.ToggleButton.Parent = _G.MainFrame
+_G.ToggleButton.BackgroundColor3 = Color3.fromRGB(235, 65, 65)
+_G.ToggleButton.Position = UDim2.new(0.06, 0, 0.40, 0)
+_G.ToggleButton.Size = UDim2.new(0.88, 0, 0, 34)
+_G.ToggleButton.Font = Enum.Font.BuilderSansBold
+_G.ToggleButton.Text = "Status: INACTIVE"
+_G.ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+_G.ToggleButton.TextSize = 13
+_G.ToggleButton.BorderSizePixel = 0
+
+local ButtonCorner1 = Instance.new("UICorner")
+ButtonCorner1.CornerRadius = UDim.new(0, 10)
+ButtonCorner1.Parent = _G.ToggleButton
+
+-- Кнопка выгрузки скрипта
+_G.UnloadButton.Name = "UnloadButton"
+_G.UnloadButton.Parent = _G.MainFrame
+_G.UnloadButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+_G.UnloadButton.Position = UDim2.new(0.06, 0, 0.68, 0)
+_G.UnloadButton.Size = UDim2.new(0.88, 0, 0, 34)
+_G.UnloadButton.Font = Enum.Font.BuilderSansBold
+_G.UnloadButton.Text = "Unload Script"
+_G.UnloadButton.TextColor3 = Color3.fromRGB(170, 170, 185)
+_G.UnloadButton.TextSize = 13
+_G.UnloadButton.BorderSizePixel = 0
+
+local ButtonCorner2 = Instance.new("UICorner")
+ButtonCorner2.CornerRadius = UDim.new(0, 10)
+ButtonCorner2.Parent = _G.UnloadButton
+
+-- Мобильная кнопка "G"
+_G.MobileMenuButton.Name = "MobileMenuButton"
+_G.MobileMenuButton.Parent = _G.ScreenGui
+_G.MobileMenuButton.BackgroundColor3 = Color3.fromRGB(255, 195, 0)
+_G.MobileMenuButton.Position = UDim2.new(0, 25, 1, -85)
+_G.MobileMenuButton.Size = UDim2.new(0, 50, 0, 50)
+_G.MobileMenuButton.Font = Enum.Font.BuilderSansBold
+_G.MobileMenuButton.Text = "G"
+_G.MobileMenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+_G.MobileMenuButton.TextSize = 26
+_G.MobileMenuButton.Visible = false
+_G.MobileMenuButton.BorderSizePixel = 0
+
+MobileButtonCorner.CornerRadius = UDim.new(1, 0)
+MobileButtonCorner.Parent = _G.MobileMenuButton
+
+TextButtonUIStroke.Parent = _G.MobileMenuButton
+TextButtonUIStroke.Color = Color3.fromRGB(20, 20, 25)
+TextButtonUIStroke.Thickness = 3.5
+TextButtonUIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
+
+ButtonGlowStroke.Parent = _G.MobileMenuButton
+ButtonGlowStroke.Color = Color3.fromRGB(215, 155, 0)
+ButtonGlowStroke.Thickness = 1.2
+ButtonGlowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+-- Направляющий text сверху
+_G.TopHintLabel.Name = "TopHintLabel"
+_G.TopHintLabel.Parent = _G.ScreenGui
+_G.TopHintLabel.BackgroundTransparency = 1
+_G.TopHintLabel.Position = UDim2.new(0.5, -200, 0, 24)
+_G.TopHintLabel.Size = UDim2.new(0, 400, 0, 30)
+_G.TopHintLabel.Font = Enum.Font.BuilderSansBold
+_G.TopHintLabel.Text = "Press G to open menu"
+_G.TopHintLabel.TextSize = 16
+_G.TopHintLabel.Visible = false
+
+TextShadow.Parent = _G.TopHintLabel
+TextShadow.Color = Color3.fromRGB(0, 0, 0)
+TextShadow.Thickness = 1.5
+TextShadow.Transparency = 0.5
+-- ==========================================
+-- ЧАСТЬ 2: УНИВЕРСАЛЬНЫЙ КОМПЛЕКСНЫЙ ОБХОД
+-- ==========================================
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 local LocalPlayer = Players.LocalPlayer
 
--- Получение папки для GUI
-local targetParent = LocalPlayer:WaitForChild("PlayerGui")
-pcall(function()
-    if syn or Krnl or fluxus or gethui then
-        targetParent = gethui() or CoreGui
-    end
-end)
-
--- Создание ScreenGui
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "LQDSOFT_GUI"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = targetParent
-
--- Текст подсказки сверху посередине (Яркий неоновый цвет)
-local TopHint = Instance.new("TextLabel")
-TopHint.Name = "TopHint"
-TopHint.Size = UDim2.new(0, 300, 0, 30)
-TopHint.Position = UDim2.new(0.5, -150, 0, 15)
-TopHint.BackgroundTransparency = 1
-TopHint.Text = "Нажми на G чтобы открыть"
-TopHint.TextColor3 = Color3.fromRGB(0, 255, 128)
-TopHint.TextSize = 18
-TopHint.Font = Enum.Font.SourceSansBold
-TopHint.Visible = false
-TopHint.Parent = ScreenGui
-
--- Круглая желтая кнопка "G" снизу слева для телефонов
-local MobileOpenBtn = Instance.new("TextButton")
-MobileOpenBtn.Name = "MobileOpenBtn"
-MobileOpenBtn.Size = UDim2.new(0, 65, 0, 65)
-MobileOpenBtn.Position = UDim2.new(0, 20, 1, -85)
-MobileOpenBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-MobileOpenBtn.Text = "G"
-MobileOpenBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-MobileOpenBtn.Font = Enum.Font.SourceSansBold
-MobileOpenBtn.TextSize = 32
-MobileOpenBtn.Visible = false
-MobileOpenBtn.Parent = ScreenGui
-
-local ButtonCorner = Instance.new("UICorner")
-ButtonCorner.CornerRadius = UDim.new(1, 0)
-ButtonCorner.Parent = MobileOpenBtn
--- Идеально ровный контейнер меню (Высота увеличена до 270 для новой кнопки)
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 310, 0, 270)
-MainFrame.Position = UDim2.new(0.5, -155, 0.5, -135)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.BorderSizePixel = 0
-MainFrame.Visible = true
-MainFrame.Parent = ScreenGui
-
--- Верхняя панель (Оранжевая)
-local TopBar = Instance.new("Frame")
-TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 35)
-TopBar.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-TopBar.BorderSizePixel = 0
-TopBar.Parent = MainFrame
-
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Size = UDim2.new(0.8, 0, 1, 0)
-Title.Position = UDim2.new(0, 10, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "Фарм Золота | LQDSOFT"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 16
-Title.Font = Enum.Font.SourceSansBold
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Parent = TopBar
-
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Name = "CloseBtn"
-CloseBtn.Size = UDim2.new(0, 26, 0, 26)
-CloseBtn.Position = UDim2.new(1, -31, 0.5, -13)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-CloseBtn.Text = "X"
-CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.Font = Enum.Font.SourceSansBold
-CloseBtn.TextSize = 14
-CloseBtn.Parent = TopBar
-
-local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(1, 0)
-CloseCorner.Parent = CloseBtn
-
-local FarmBtn = Instance.new("TextButton")
-FarmBtn.Name = "FarmBtn"
-FarmBtn.Size = UDim2.new(1, -20, 0, 40)
-FarmBtn.Position = UDim2.new(0, 10, 0, 45)
-FarmBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-FarmBtn.Text = "Афк Фарм: ВЫКЛ"
-FarmBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-FarmBtn.Font = Enum.Font.SourceSansBold
-FarmBtn.TextSize = 18
-FarmBtn.Parent = MainFrame
-
-local EspBtn = Instance.new("TextButton")
-EspBtn.Name = "EspBtn"
-EspBtn.Size = UDim2.new(1, -20, 0, 32)
-EspBtn.Position = UDim2.new(0, 10, 0, 92)
-EspBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-EspBtn.Text = "Esp: ВЫКЛ"
-EspBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-EspBtn.Font = Enum.Font.SourceSansBold
-EspBtn.TextSize = 14
-EspBtn.Parent = MainFrame
-
--- ДОБАВЛЕНО: Кнопка включения Анти-АФК в меню
-local AntiAfkBtn = Instance.new("TextButton")
-AntiAfkBtn.Name = "AntiAfkBtn"
-AntiAfkBtn.Size = UDim2.new(1, -20, 0, 32)
-AntiAfkBtn.Position = UDim2.new(0, 10, 0, 130)
-AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-AntiAfkBtn.Text = "Анти АФК: ВЫКЛ"
-AntiAfkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AntiAfkBtn.Font = Enum.Font.SourceSansBold
-AntiAfkBtn.TextSize = 14
-AntiAfkBtn.Parent = MainFrame
-local DelayLabel = Instance.new("TextLabel")
-DelayLabel.Name = "DelayLabel"
-DelayLabel.Size = UDim2.new(0, 35, 0, 30)
-DelayLabel.Position = UDim2.new(0, 10, 0, 168)
-DelayLabel.BackgroundTransparency = 1
-DelayLabel.Text = "2.0"
-DelayLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-DelayLabel.TextSize = 16
-DelayLabel.Font = Enum.Font.SourceSansBold
-DelayLabel.Parent = MainFrame
-
-local MinusBtn = Instance.new("TextButton")
-MinusBtn.Name = "MinusBtn"
-MinusBtn.Size = UDim2.new(0, 26, 0, 26)
-MinusBtn.Position = UDim2.new(0, 48, 0, 170)
-MinusBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-MinusBtn.Text = "-"
-MinusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinusBtn.Font = Enum.Font.SourceSansBold
-MinusBtn.TextSize = 16
-MinusBtn.Parent = MainFrame
-
-local PlusBtn = Instance.new("TextButton")
-PlusBtn.Name = "PlusBtn"
-PlusBtn.Size = UDim2.new(0, 26, 0, 26)
-PlusBtn.Position = UDim2.new(0, 80, 0, 170)
-PlusBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
-PlusBtn.Text = "+"
-PlusBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-PlusBtn.Font = Enum.Font.SourceSansBold
-PlusBtn.TextSize = 16
-PlusBtn.Parent = MainFrame
-
-local RectangleLabel = Instance.new("TextLabel")
-RectangleLabel.Name = "NormLabel"
-RectangleLabel.Size = UDim2.new(0, 80, 0, 30)
-RectangleLabel.Position = UDim2.new(0, 115, 0, 168)
-RectangleLabel.BackgroundTransparency = 1
-RectangleLabel.Text = "2.0 норм"
-RectangleLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-RectangleLabel.TextSize = 14
-RectangleLabel.Font = Enum.Font.SourceSans
-RectangleLabel.TextXAlignment = Enum.TextXAlignment.Left
-RectangleLabel.Parent = MainFrame
-
-local FixSpawnBtn = Instance.new("TextButton")
-FixSpawnBtn.Name = "FixSpawnBtn"
-FixSpawnBtn.Size = UDim2.new(0, 120, 0, 28)
-FixSpawnBtn.Position = UDim2.new(0, 10, 0, 202)
-FixSpawnBtn.BackgroundColor3 = Color3.fromRGB(230, 120, 30)
-FixSpawnBtn.Text = "Исправить спавн"
-FixSpawnBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-FixSpawnBtn.Font = Enum.Font.SourceSansBold
-FixSpawnBtn.TextSize = 13
-FixSpawnBtn.Parent = MainFrame
-
-local DestroyBtn = Instance.new("TextButton")
-DestroyBtn.Name = "DestroyBtn"
-DestroyBtn.Size = UDim2.new(0, 120, 0, 28)
-DestroyBtn.Position = UDim2.new(0, 10, 0, 235)
-DestroyBtn.BackgroundColor3 = Color3.fromRGB(120, 30, 30)
-DestroyBtn.Text = "Выгрузить чит"
-DestroyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-DestroyBtn.Font = Enum.Font.SourceSansBold
-DestroyBtn.TextSize = 13
-DestroyBtn.Parent = MainFrame
-
-local autofarmActive = false
-local espActive = false
-local antiAfkActive = false -- Переключатель Анти-АФК
-local currentDelay = 2.0
+local enabled = false
 local scriptRunning = true
+local currentLang = "EN"
 
-local goldTracker = Instance.new("TextLabel")
-goldTracker.Name = "GoldTracker"
-goldTracker.Size = UDim2.new(0, 130, 0, 25)
-goldTracker.Position = UDim2.new(1, -145, 0, 202)
-goldTracker.BackgroundTransparency = 1
-goldTracker.Text = "Золото/ч: 0"
-goldTracker.TextColor3 = Color3.fromRGB(255, 255, 255)
-goldTracker.TextSize = 14
-goldTracker.Font = Enum.Font.SourceSansBold
-goldTracker.TextXAlignment = Enum.TextXAlignment.Left
-goldTracker.Parent = MainFrame
+local idledConnection = nil
+local loopThread = nil
 
-local goldPerMinTracker = Instance.new("TextLabel")
-goldPerMinTracker.Name = "GoldPerMinTracker"
-goldPerMinTracker.Size = UDim2.new(0, 130, 0, 25)
-goldPerMinTracker.Position = UDim2.new(1, -145, 0, 228)
-goldPerMinTracker.BackgroundTransparency = 1
-goldPerMinTracker.Text = "Золото/мин: 0"
-goldPerMinTracker.TextColor3 = Color3.fromRGB(255, 255, 255)
-goldPerMinTracker.TextSize = 14
-goldPerMinTracker.Font = Enum.Font.SourceSansBold
-goldPerMinTracker.TextXAlignment = Enum.TextXAlignment.Left
-goldPerMinTracker.Parent = MainFrame
+local localization = {
+    EN = {
+        unload = "Unload Script",
+        hint = "Press G to open menu",
+        statusActive = "Status: ACTIVE",
+        statusInactive = "Status: INACTIVE"
+    },
+    RU = {
+        unload = "Выгрузить чит",
+        hint = "Нажмите на G, чтобы открыть меню",
+        statusActive = "Статус: АКТИВЕН",
+        statusInactive = "Статус: НЕАКТИВЕН"
+    }
+}
 
--- Таймер на 20 секунд со сбросом
-task.spawn(function()
-    local intervalStartTime = os.time()
-    local intervalStartGold = LocalPlayer:WaitForChild("Data"):WaitForChild("Gold").Value
-    while scriptRunning do
-        task.wait(0.5)
-        local currentGold = LocalPlayer.Data.Gold.Value
-        local secondsInInterval = os.time() - intervalStartTime
-        if secondsInInterval >= 20 then
-            intervalStartTime = os.time()
-            intervalStartGold = currentGold
-            secondsInInterval = 0
-            goldTracker.Text = "Золото/ч: 0"
-            goldPerMinTracker.Text = "Золото/мин: 0"
-        end
-        if secondsInInterval > 0 and (currentGold - intervalStartGold) > 0 then
-            local goldEarned = currentGold - intervalStartGold
-            goldTracker.Text = "Золото/ч: " .. tostring(math.floor(goldEarned / (secondsInInterval / 3600)))
-            goldPerMinTracker.Text = "Золото/мин: " .. tostring(math.floor(goldEarned / (secondsInInterval / 60)))
-        end
+local function updateTexts()
+    local langData = localization[currentLang]
+    _G.UnloadButton.Text = langData.unload
+    _G.TopHintLabel.Text = langData.hint
+    if enabled then
+        _G.ToggleButton.Text = langData.statusActive
+    else
+        _G.ToggleButton.Text = langData.statusInactive
     end
-end)
-local function setGuiVisible(state)
-    MainFrame.Visible = state
-    TopHint.Visible = not state
-    MobileOpenBtn.Visible = not state
 end
 
-CloseBtn.MouseButton1Click:Connect(function() setGuiVisible(false) end)
-MobileOpenBtn.MouseButton1Click:Connect(function() setGuiVisible(true) end)
+local function playClickAnimation(button)
+    local originalSize = button.Size
+    button:TweenSize(UDim2.new(originalSize.X.Scale, originalSize.X.Offset - 6, originalSize.Y.Scale, originalSize.Y.Offset - 4), "Out", "Quad", 0.05, true)
+    task.wait(0.05)
+    button:TweenSize(originalSize, "Out", "Quad", 0.05, true)
+end
 
-MinusBtn.MouseButton1Click:Connect(function()
-    if currentDelay > 0.1 then
-        currentDelay = math.round((currentDelay - 0.1) * 10) / 10
-        DelayLabel.Text = tostring(currentDelay)
-        RectangleLabel.Text = tostring(currentDelay) .. " норм"
+_G.LangButton.MouseButton1Click:Connect(function()
+    currentLang = (currentLang == "EN") and "RU" or "EN"
+    _G.LangButton.Text = currentLang
+    updateTexts()
+end)
+
+local rgbConnection
+rgbConnection = RunService.RenderStepped:Connect(function()
+    if not scriptRunning then rgbConnection:Disconnect() return end
+    if _G.TopHintLabel.Visible then
+        local hue = (tick() % 5) / 5
+        _G.TopHintLabel.TextColor3 = Color3.fromHSV(hue, 0.75, 1)
     end
 end)
 
-PlusBtn.MouseButton1Click:Connect(function()
-    if currentDelay < 5.0 then
-        currentDelay = math.round((currentDelay + 0.1) * 10) / 10
-        DelayLabel.Text = tostring(currentDelay)
-        RectangleLabel.Text = tostring(currentDelay) .. " норм"
+local function startUniversalBypass()
+    if loopThread then task.cancel(loopThread) end
+    if idledConnection then idledConnection:Disconnect() end
+    
+    idledConnection = LocalPlayer.Idled:Connect(function()
+        if enabled and scriptRunning then
+            pcall(function()
+                game:GetService("VirtualUser"):Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                task.wait(0.1)
+                game:GetService("VirtualUser"):Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            end)
+        end
+    end)
+    
+    loopThread = task.spawn(function()
+        while enabled and scriptRunning do
+            task.wait(math.random(45, 90)) -- Хаотичный интервал времени
+            
+            local character = LocalPlayer.Character
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            
+            if humanoid and humanoid.Health > 0 then
+                pcall(function()
+                    local actionType = math.random(1, 3) -- Рандомайзер действий
+                    
+                    if actionType == 1 then
+                        humanoid.Jump = true -- Прыжок (Легально для BAC-1515)
+                    elseif actionType == 2 then
+                        -- Микро-шаг
+                        humanoid:Move(Vector3.new(0, 0, -0.1), true)
+                        task.wait(0.05)
+                        humanoid:Move(Vector3.new(0, 0, 0.1), true)
+                        task.wait(0.05)
+                        humanoid:Move(Vector3.new(0, 0, 0), true)
+                    elseif actionType == 3 then
+                        -- Системный клик по экрану
+                        VirtualInputManager:SendMouseButtonEvent(math.random(10, 100), math.random(10, 100), 0, true, game, 1)
+                        task.wait(0.05)
+                        VirtualInputManager:SendMouseButtonEvent(math.random(10, 100), math.random(10, 100), 0, false, game, 1)
+                    end
+                end)
+            end
+        end
+    end)
+end
+
+local function toggleMenu()
+    if not scriptRunning then return end
+    local isVisible = _G.MainFrame.Visible
+    _G.MainFrame.Visible = not isVisible
+    _G.MobileMenuButton.Visible = isVisible
+    _G.TopHintLabel.Visible = isVisible
+end
+
+_G.ToggleButton.MouseButton1Click:Connect(function()
+    task.spawn(function() playClickAnimation(_G.ToggleButton) end)
+    enabled = not enabled
+    if enabled then
+        _G.ToggleButton.BackgroundColor3 = Color3.fromRGB(45, 185, 105)
+        startUniversalBypass()
+    else
+        _G.ToggleButton.BackgroundColor3 = Color3.fromRGB(235, 65, 65)
+        if idledConnection then idledConnection:Disconnect() end
+        if loopThread then task.cancel(loopThread) end
     end
+    updateTexts()
 end)
 
-local inputConnection
-inputConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not scriptRunning then if inputConnection then inputConnection:Disconnect() end return end
+_G.CloseXButton.MouseEnter:Connect(function() _G.CloseXButton.TextColor3 = Color3.fromRGB(255, 80, 80) end)
+_G.CloseXButton.MouseLeave:Connect(function() _G.CloseXButton.TextColor3 = Color3.fromRGB(140, 140, 155) end)
+_G.LangButton.MouseEnter:Connect(function() _G.LangButton.TextColor3 = Color3.fromRGB(240, 240, 245) end)
+_G.LangButton.MouseLeave:Connect(function() _G.LangButton.TextColor3 = Color3.fromRGB(140, 140, 155) end)
+
+_G.CloseXButton.MouseButton1Click:Connect(toggleMenu)
+_G.MobileMenuButton.MouseButton1Click:Connect(function()
+    task.spawn(function() playClickAnimation(_G.MobileMenuButton) end)
+    toggleMenu()
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
-        setGuiVisible(not MainFrame.Visible)
+        toggleMenu()
     end
 end)
 
-local function executeCharacterReset()
-    local char = LocalPlayer.Character
-    local hum = char and char:FindFirstChildOfClass("Humanoid")
-    if hum then hum.Health = 0 end
-end
-
-FixSpawnBtn.MouseButton1Click:Connect(executeCharacterReset)
-
-local function clearAllEsp()
-    for _, p in pairs(Players:GetPlayers()) do
-        if p.Character then
-            if p.Character:FindFirstChild("LqdEspGui") then p.Character.LqdEspGui:Destroy() end
-            if p.Character:FindFirstChild("LqdHighlight") then p.Character.LqdHighlight:Destroy() end
-        end
-    end
-end
-
-local antiAfkConnection
-
-DestroyBtn.MouseButton1Click:Connect(function()
+_G.UnloadButton.MouseButton1Click:Connect(function()
+    playClickAnimation(_G.UnloadButton)
     scriptRunning = false
-    autofarmActive = false
-    espActive = false
-    antiAfkActive = false
-    clearAllEsp()
-    local camera = Workspace.CurrentCamera
-    if camera then camera.CameraType = Enum.CameraType.Custom end
-    if inputConnection then inputConnection:Disconnect() end
-    if antiAfkConnection then antiAfkConnection:Disconnect() end
-    ScreenGui:Destroy()
-end)
-
-local function getPlayerGold(player)
-    if not player then return 0 end
-    local stats = player:FindFirstChild("leaderstats")
-    if stats then
-        local gold = stats:FindFirstChild("Gold") or stats:FindFirstChild("Золото") or stats:FindFirstChild("gold")
-        if gold then return gold.Value end
-    end
-    local dataFolder = player:FindFirstChild("Data") or player:FindFirstChild("data")
-    if dataFolder then
-        local gold = dataFolder:FindFirstChild("Gold") or dataFolder:FindFirstChild("GoldValue")
-        if gold then return gold.Value end
-    end
-    return 0
-end
-
-task.spawn(function()
-    while scriptRunning do
-        task.wait(0.5)
-        if espActive then
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer and player.Character then
-                    local highlight = player.Character:FindFirstChild("LqdHighlight")
-                    if not highlight then
-                        highlight = Instance.new("Highlight")
-                        highlight.Name = "LqdHighlight"
-                        highlight.FillColor = Color3.fromRGB(0, 255, 255)
-                        highlight.FillTransparency = 0.5
-                        highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-                        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                        highlight.Parent = player.Character
-                    end
-                    if player.Character:FindFirstChild("Head") then
-                        local head = player.Character.Head
-                        local espGui = player.Character:FindFirstChild("LqdEspGui")
-                        if not espGui then
-                            espGui = Instance.new("BillboardGui")
-                            espGui.Name = "LqdEspGui"
-                            espGui.Size = UDim2.new(0, 200, 0, 40)
-                            espGui.AlwaysOnTop = true
-                            pcall(function() espGui.ExtentsOffset = Vector3.new(0, 2.5, 0) end)
-                            espGui.Parent = player.Character
-                            local textLabel = Instance.new("TextLabel")
-                            textLabel.Name = "EspText"
-                            textLabel.Size = UDim2.new(1, 0, 1, 0)
-                            textLabel.BackgroundTransparency = 1
-                            textLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-                            textLabel.TextSize = 16
-                            textLabel.Font = Enum.Font.SourceSansBold
-                            textLabel.Parent = espGui
-                        end
-                        local playerGold = getPlayerGold(player)
-                        if espGui:FindFirstChild("EspText") then
-                            espGui.EspText.Text = player.Name .. "\n[Золото: " .. tostring(playerGold) .. "]"
-                        end
-                    end
-                end
-            end
-        else
-            clearAllEsp()
-        end
-    end
-end)
-
-EspBtn.MouseButton1Click:Connect(function()
-    if not scriptRunning then return end
-    espActive = not espActive
-    if espActive then
-        EspBtn.Text = "Esp: ВКЛ"
-        EspBtn.BackgroundColor3 = Color3.fromRGB(90, 200, 90)
-    else
-        EspBtn.Text = "Esp: ВЫКЛ"
-        EspBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-        clearAllEsp()
-    end
-end)
-local function forceMoveFrame(targetCFrame)
-    local char = LocalPlayer.Character
-    local root = char and char:FindFirstChild("HumanoidRootPart")
-    local camera = Workspace.CurrentCamera
-    if root and targetCFrame and autofarmActive and scriptRunning then
-        if camera then
-            camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(targetCFrame.Position + Vector3.new(0, 15, 25), targetCFrame.Position)
-        end
-        local duration = currentDelay
-        local startTime = tick()
-        while tick() - startTime < duration do
-            if not autofarmActive or not scriptRunning then break end
-            root.CFrame = targetCFrame + Vector3.new(0, 3, 0)
-            root.Velocity = Vector3.new(0,0,0)
-            if camera then
-                camera.CFrame = CFrame.new(targetCFrame.Position + Vector3.new(0, 15, 25), targetCFrame.Position)
-            end
-            RunService.Heartbeat:Wait()
-        end
-    end
-end
-
-local function getPhysicalStages()
-    local stages = {}
-    for _, desc in pairs(Workspace:GetDescendants()) do
-        if desc:IsA("BasePart") and (desc.Name == "DarknessPart" or desc.Name == "Trigger" or desc.Name:lower():find("stage")) then
-            if desc.Parent and (desc.Parent.Name:lower():find("stage") or desc.Parent.Name:lower():find("zone")) then
-                table.insert(stages, desc)
-            end
-        end
-    end
-    table.sort(stages, function(a, b)
-        return a.Position.Z < b.Position.Z
-    end)
-    return stages
-end
-
-task.spawn(function()
-    while scriptRunning do
-        task.wait(0.1)
-        if autofarmActive and scriptRunning then
-            local char = LocalPlayer.Character
-            local hum = char and char:FindFirstChildOfClass("Humanoid")
-            local root = char and char:FindFirstChild("HumanoidRootPart")
-            if char and hum and hum.Health > 0 and root then
-                
-                local mapStages = getPhysicalStages()
-                
-                if #mapStages > 0 then
-                    local count = 0
-                    for _, stagePart in pairs(mapStages) do
-                        if not autofarmActive or not scriptRunning or hum.Health <= 0 then break end
-                        if count >= 10 then break end
-                        
-                        if stagePart and stagePart.Parent then
-                            forceMoveFrame(stagePart.CFrame)
-                            count = count + 1
-                        end
-                    end
-                else
-                    local boatStages = Workspace:FindFirstChild("BoatStages") or Workspace:FindFirstChild("Stages")
-                    local normalStages = boatStages and (boatStages:FindFirstChild("NormalStages") or boatStages)
-                    if normalStages then
-                        for i = 1, 10 do
-                            if not autofarmActive or not scriptRunning or hum.Health <= 0 then break end
-                            local stage = normalStages:FindFirstChild("CaveStage" .. i) or normalStages:FindFirstChild("Stage" .. i)
-                            local trigger = stage and (stage:FindFirstChild("DarknessPart") or stage:FindFirstChild("Trigger"))
-                            if trigger then forceMoveFrame(trigger.CFrame) end
-                        end
-                    end
-                end
-                
-                local endZone = Workspace:FindFirstChild("TheEnd") or Workspace:FindFirstChild("End")
-                local chest = endZone and (endZone:FindFirstChild("GoldenChest") or endZone:FindFirstChild("Chest"))
-                local chestTop = chest and (chest:FindFirstChild("ChestTop") or chest:FindFirstChild("Main"))
-                
-                if chestTop and autofarmActive and scriptRunning and hum.Health > 0 then
-                    local startTimeChest = tick()
-                    local camera = Workspace.CurrentCamera
-                    while tick() - startTimeChest < 5.0 do
-                        if not autofarmActive or not scriptRunning then break end
-                        root.CFrame = chestTop.CFrame + Vector3.new(0, 2, 0)
-                        if camera then camera.CFrame = CFrame.new(chestTop.Position + Vector3.new(0, 10, 15), chestTop.Position) end
-                        RunService.Heartbeat:Wait()
-                    end
-                end
-                
-                if autofarmActive and scriptRunning and hum.Health > 0 then
-                    local camera = Workspace.CurrentCamera
-                    if camera then camera.CameraType = Enum.CameraType.Custom end
-                    executeCharacterReset() 
-                    LocalPlayer.CharacterAdded:Wait()
-                    task.wait(1.5)
-                end
-            end
-        end
-    end
-end)
-
-FarmBtn.MouseButton1Click:Connect(function()
-    if not scriptRunning then return end
-    autofarmActive = not autofarmActive
-    if autofarmActive then
-        FarmBtn.Text = "Афк Фарм: ВКЛ"
-        FarmBtn.BackgroundColor3 = Color3.fromRGB(90, 200, 90)
-    else
-        FarmBtn.Text = "Афк Фарм: ВЫКЛ"
-        FarmBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-        local camera = Workspace.CurrentCamera
-        if camera then camera.CameraType = Enum.CameraType.Custom end
-        executeCharacterReset()
-    end
-end)
-
--- Логика переключения кнопки Анти-АФК
-AntiAfkBtn.MouseButton1Click:Connect(function()
-    if not scriptRunning then return end
-    antiAfkActive = not antiAfkActive
-    if antiAfkActive then
-        AntiAfkBtn.Text = "Анти АФК: ВКЛ"
-        AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(90, 200, 90)
-    else
-        AntiAfkBtn.Text = "Анти АФК: ВЫКЛ"
-        AntiAfkBtn.BackgroundColor3 = Color3.fromRGB(230, 90, 90)
-    end
-end)
-
-local dragging, dragInput, dragStart, startPos
-local function update(input)
-    local delta = input.Position - dragStart
-    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-TopBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-        input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragging = false end end)
-    end
-end)
-
-TopBar.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end end)
-UserInputService.InputChanged:Connect(function(input) if input == dragInput and dragging then update(input) end end)
-
-pcall(function()
-    antiAfkConnection = LocalPlayer.Idled:Connect(function()
-        if antiAfkActive then
-            local virtualUser = game:GetService("VirtualUser")
-            virtualUser:Button2Down(Vector2.new(0, 0), Workspace.CurrentCamera.CFrame)
-            task.wait(0.2)
-            virtualUser:Button2Up(Vector2.new(0, 0), Workspace.CurrentCamera.CFrame)
-        end
-    end)
+    enabled = false
+    if idledConnection then idledConnection:Disconnect() end
+    if loopThread then task.cancel(loopThread) end
+    if rgbConnection then rgbConnection:Disconnect() end
+    _G.ScreenGui:Destroy()
 end)
