@@ -32,7 +32,6 @@ _G.MainFrame.Position = UDim2.new(0.5, -125, 0.4, -75)
 _G.MainFrame.Size = UDim2.new(0, 250, 0, 150)
 _G.MainFrame.Active = true
 _G.MainFrame.Draggable = true
-_G.MainFrame.BorderSizePixel = 0
 
 MainCorner.CornerRadius = UDim.new(0, 14)
 MainCorner.Parent = _G.MainFrame
@@ -98,7 +97,6 @@ _G.ToggleButton.Font = Enum.Font.BuilderSansBold
 _G.ToggleButton.Text = "Status: INACTIVE"
 _G.ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 _G.ToggleButton.TextSize = 13
-_G.ToggleButton.BorderSizePixel = 0
 
 local ButtonCorner1 = Instance.new("UICorner")
 ButtonCorner1.CornerRadius = UDim.new(0, 10)
@@ -114,7 +112,6 @@ _G.UnloadButton.Font = Enum.Font.BuilderSansBold
 _G.UnloadButton.Text = "Unload Script"
 _G.UnloadButton.TextColor3 = Color3.fromRGB(170, 170, 185)
 _G.UnloadButton.TextSize = 13
-_G.UnloadButton.BorderSizePixel = 0
 
 local ButtonCorner2 = Instance.new("UICorner")
 ButtonCorner2.CornerRadius = UDim.new(0, 10)
@@ -131,7 +128,6 @@ _G.MobileMenuButton.Text = "G"
 _G.MobileMenuButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 _G.MobileMenuButton.TextSize = 26
 _G.MobileMenuButton.Visible = false
-_G.MobileMenuButton.BorderSizePixel = 0
 
 MobileButtonCorner.CornerRadius = UDim.new(1, 0)
 MobileButtonCorner.Parent = _G.MobileMenuButton
@@ -146,7 +142,7 @@ ButtonGlowStroke.Color = Color3.fromRGB(215, 155, 0)
 ButtonGlowStroke.Thickness = 1.2
 ButtonGlowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
--- Направляющий text сверху
+-- Направляющий текст сверху
 _G.TopHintLabel.Name = "TopHintLabel"
 _G.TopHintLabel.Parent = _G.ScreenGui
 _G.TopHintLabel.BackgroundTransparency = 1
@@ -162,20 +158,17 @@ TextShadow.Color = Color3.fromRGB(0, 0, 0)
 TextShadow.Thickness = 1.5
 TextShadow.Transparency = 0.5
 -- ==========================================
--- ЧАСТЬ 2: УНИВЕРСАЛЬНЫЙ КОМПЛЕКСНЫЙ ОБХОД
+-- ЧАСТЬ 2: СВЕРХБЕЗОПАСНЫЙ УНИВЕРСАЛЬНЫЙ ОБХОД
 -- ==========================================
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
 local LocalPlayer = Players.LocalPlayer
 
 local enabled = false
 local scriptRunning = true
 local currentLang = "EN"
-
-local idledConnection = nil
-local loopThread = nil
+local universalThread = nil
 
 local localization = {
     EN = {
@@ -225,45 +218,38 @@ rgbConnection = RunService.RenderStepped:Connect(function()
     end
 end)
 
-local function startUniversalBypass()
-    if loopThread then task.cancel(loopThread) end
-    if idledConnection then idledConnection:Disconnect() end
+-- Абсолютно чистый обход через физику персонажа
+local function startUltimateBypass()
+    if universalThread then task.cancel(universalThread) end
     
-    idledConnection = LocalPlayer.Idled:Connect(function()
-        if enabled and scriptRunning then
-            pcall(function()
-                game:GetService("VirtualUser"):Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-                task.wait(0.1)
-                game:GetService("VirtualUser"):Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-            end)
-        end
-    end)
-    
-    loopThread = task.spawn(function()
+    universalThread = task.spawn(function()
         while enabled and scriptRunning do
-            task.wait(math.random(45, 90)) -- Хаотичный интервал времени
+            -- Случайное время от 60 до 150 секунд, чтобы сломать логику проверки античитов
+            task.wait(math.random(60, 150))
             
             local character = LocalPlayer.Character
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            local cam = workspace.CurrentCamera
             
             if humanoid and humanoid.Health > 0 then
                 pcall(function()
-                    local actionType = math.random(1, 3) -- Рандомайзер действий
+                    local r = math.random(1, 3)
                     
-                    if actionType == 1 then
-                        humanoid.Jump = true -- Прыжок (Легально для BAC-1515)
-                    elseif actionType == 2 then
-                        -- Микро-шаг
-                        humanoid:Move(Vector3.new(0, 0, -0.1), true)
-                        task.wait(0.05)
-                        humanoid:Move(Vector3.new(0, 0, 0.1), true)
+                    if r == 1 then
+                        -- Физический микро-прыжок (Обход Blox Fruits BAC)
+                        humanoid.Jump = true
+                        task.wait(math.random(1, 3) / 10)
+                        humanoid.Jump = false
+                    elseif r == 2 then
+                        -- Легальный шаг на месте
+                        local direction = Vector3.new(math.random(-1, 1), 0, math.random(-1, 1)).Unit
+                        humanoid:Move(direction, true)
                         task.wait(0.05)
                         humanoid:Move(Vector3.new(0, 0, 0), true)
-                    elseif actionType == 3 then
-                        -- Системный клик по экрану
-                        VirtualInputManager:SendMouseButtonEvent(math.random(10, 100), math.random(10, 100), 0, true, game, 1)
-                        task.wait(0.05)
-                        VirtualInputManager:SendMouseButtonEvent(math.random(10, 100), math.random(10, 100), 0, false, game, 1)
+                    elseif r == 3 and cam then
+                        -- Сдвиг камеры на невидимый микро-угол (Сброс таймера)
+                        local offset = math.rad(math.random(-5, 5) / 1000)
+                        cam.CFrame = cam.CFrame * CFrame.Angles(0, offset, 0)
                     end
                 end)
             end
@@ -284,11 +270,10 @@ _G.ToggleButton.MouseButton1Click:Connect(function()
     enabled = not enabled
     if enabled then
         _G.ToggleButton.BackgroundColor3 = Color3.fromRGB(45, 185, 105)
-        startUniversalBypass()
+        startUltimateBypass()
     else
         _G.ToggleButton.BackgroundColor3 = Color3.fromRGB(235, 65, 65)
-        if idledConnection then idledConnection:Disconnect() end
-        if loopThread then task.cancel(loopThread) end
+        if universalThread then task.cancel(universalThread) end
     end
     updateTexts()
 end)
@@ -314,8 +299,7 @@ _G.UnloadButton.MouseButton1Click:Connect(function()
     playClickAnimation(_G.UnloadButton)
     scriptRunning = false
     enabled = false
-    if idledConnection then idledConnection:Disconnect() end
-    if loopThread then task.cancel(loopThread) end
+    if universalThread then task.cancel(universalThread) end
     if rgbConnection then rgbConnection:Disconnect() end
     _G.ScreenGui:Destroy()
 end)
