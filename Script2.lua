@@ -178,14 +178,14 @@ Sm.Text = "Золото/мин: 166"
 Sm.TextColor3 = Color3.fromRGB(240, 240, 240)
 Sm.Font = Enum.Font.SourceSansBold; Sm.TextSize = 13; Sm.TextXAlignment = Enum.TextXAlignment.Left
 
+_G.IsFarmRunning = false -- Флаг активности
+
 ToggleFarm.MouseButton1Click:Connect(function()
     _G.AutoFarm = not _G.AutoFarm
     ToggleFarm.BackgroundColor3 = _G.AutoFarm and Color3.fromRGB(65, 150, 65) or Color3.fromRGB(215, 85, 85)
     ToggleFarm.Text = _G.AutoFarm and "Афк Фарм: ВКЛ" or "Афк Фарм: ВЫКЛ"
-    if _G.AutoFarm then 
-        if _G.StartExactCaveFarm then _G.StartExactCaveFarm() end 
-    else 
-        if _G.KillPlayer then _G.KillPlayer() end 
+    if not _G.AutoFarm and _G.KillPlayer then 
+        _G.KillPlayer() 
     end
 end)
 
@@ -232,60 +232,63 @@ end
 
 _G.ResetGravity = function() workspace.Gravity = NormalGravity end
 
--- ГЛАВНЫЙ ИСПРАВЛЕННЫЙ ДВИЖОК: Полная пошаговая проверка сборки персонажа на спавне
-_G.StartExactCaveFarm = function()
-    if not _G.AutoFarm then return end
+-- Логика пролета одного полного круга
+local function ExecuteSingleFarmRun(char, root, hum)
+    _G.IsFarmRunning = true
     
-    -- Жесткое пошаговое ожидание загрузки персонажа (Предотвращает зависания потока)
-    local char = LP.Character or LP.CharacterAdded:Wait()
-    local root = char:WaitForChild("HumanoidRootPart", 10)
-    local hum = char:WaitForChild("Humanoid", 10)
+    workspace.Gravity = 0 -- Включаем невесомость
     
-    if root and hum and hum.Health > 0 then
-        task.wait(1.5) -- Обязательный легитный тайм-аут прогрузки на спавне базы
-        if not _G.AutoFarm then return end
-        
-        workspace.Gravity = 0 -- Невесомость
-        
-        local normalStages = workspace:FindFirstChild("BoatStages") and workspace.BoatStages:FindFirstChild("NormalStages")
-        if normalStages then
-            -- Цикл по вашему ТЗ со скриншота: CaveStage1 – CaveStage10
-            for i = 1, 10 do
-                if not _G.AutoFarm then break end
-                local caveStage = normalStages:FindFirstChild("CaveStage" .. i)
+    local normalStages = workspace:FindFirstChild("BoatStages") and workspace.BoatStages:FindFirstChild("NormalStages")
+    if normalStages then
+        -- Четкий пошаговый пролет CaveStage1 - CaveStage10
+        for i = 1, 10 do
+            if not _G.AutoFarm or not char.Parent or hum.Health <= 0 then break end
+            local caveStage = normalStages:FindFirstChild("CaveStage" .. i)
+            
+            if caveStage and caveStage:FindFirstChild("DarknessPart") then
+                root.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                root.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
                 
-                if caveStage and caveStage:FindFirstChild("DarknessPart") then
-                    root.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                    root.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
-                    
-                    root.CFrame = caveStage.DarknessPart.CFrame
-                    task.wait(_G.SpawnSpeed) -- Твоя задержка КД из меню
-                end
+                root.CFrame = caveStage.DarknessPart.CFrame
+                task.wait(_G.SpawnSpeed)
             end
         end
-        
-        -- По достижении CaveStage10 — моментальный килл
-        if _G.AutoFarm then
-            _G.KillPlayer()
-        end
     end
+    
+    -- Сброс в конце круга для возрождения
+    if _G.AutoFarm and hum.Health > 0 then
+        _G.KillPlayer()
+    else
+        workspace.Gravity = NormalGravity
+    end
+    
+    _G.IsFarmRunning = false
 end
 
--- ИСПРАВЛЕНО: Безопасный триггер респавна. Запускает цикл только тогда, когда старый поток полностью очищен
-if _G.CharacterConnection then _G.CharacterConnection:Disconnect() end
-_G.CharacterConnection = LP.CharacterAdded:Connect(function(char)
-    if _G.AutoFarm then
-        -- Ждем, пока игра уберет заставку награды и персонаж появится на спавне базы живым
-        local hum = char:WaitForChild("Humanoid", 10)
-        if hum then
-            hum.AncestryChanged:Wait() -- Защита от запуска в мертвом состоянии
-            task.wait(1.2)
-            _G.StartExactCaveFarm()
+-- ИСПРАВЛЕНО: Бесконечный неуязвимый поток контроля спавна. Проверяет зависания каждую секунду
+task.spawn(function()
+    while true do
+        task.wait(1.0)
+        if _G.AutoFarm and not _G.IsFarmRunning then
+            local char = LP.Character
+            if char and char.Parent then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                
+                -- Если персонаж полностью собрался, жив и никуда не летит — запускаем круг
+                if root and hum and hum.Health > 0 then
+                    -- Дополнительная проверка: даем персонажу легитно постоять на спавне 1.5 секунды
+                    task.wait(1.5)
+                    if _G.AutoFarm and not _G.IsFarmRunning and hum.Health > 0 then
+                        ExecuteSingleFarmRun(char, root, hum)
+                    end
+                end
+            end
         end
     end
 end)
 
--- Высокий синий ESP (+5.0 студов вверх над игроком) по папке Data режима
+-- Высокий синий ESP
 _G.ToggleESPState = function()
     if _G.EspActive then
         for _, p in pairs(Players:GetPlayers()) do
@@ -330,7 +333,6 @@ Players.PlayerAdded:Connect(function(p)
     p.CharacterAdded:Connect(function() if _G.EspActive then task.wait(0.5); _G.ToggleESPState() end end)
 end)
 
--- Встроенный фоновый кликер Анти-АФК
 if not _G.AntiAfkConnected then
     _G.AntiAfkConnected = true
     LP.Idled:Connect(function()
