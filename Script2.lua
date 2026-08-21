@@ -12,7 +12,6 @@ _G.EspActive = false
 _G.AntiAfk = false
 _G.SpawnSpeed = 2.0
 
--- Главное меню — Выровнено ровно по центру экрана (0.5, 0.5)
 local Main = Instance.new("Frame", SG)
 Main.Name = "MainFrame"
 Main.Size = UDim2.new(0, 310, 0, 240)
@@ -22,7 +21,6 @@ Main.BorderSizePixel = 0
 Main.Active = true
 Main.Draggable = true
 
--- Верхняя широкая оранжевая плашка "Фарм Золота | LQDSOFT"
 local TopHeader = Instance.new("Frame", Main)
 TopHeader.Size = UDim2.new(1, 0, 0, 32)
 TopHeader.BackgroundColor3 = Color3.fromRGB(235, 137, 53)
@@ -38,7 +36,6 @@ Title.Font = Enum.Font.SourceSansBold
 Title.TextSize = 14
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Круглая кнопка закрытия "X"
 local CloseBtn = Instance.new("TextButton", TopHeader)
 CloseBtn.Size = UDim2.new(0, 20, 0, 20)
 CloseBtn.Position = UDim2.new(1, -26, 0, 6)
@@ -50,7 +47,6 @@ CloseBtn.TextSize = 11
 CloseBtn.BorderSizePixel = 0
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
 
--- Подсказка при скрытии меню (Переливающийся RGB)
 local TopHint = Instance.new("TextLabel", SG)
 TopHint.Size = UDim2.new(1, 0, 0, 30)
 TopHint.Position = UDim2.new(0, 0, 0, 10)
@@ -69,7 +65,6 @@ task.spawn(function()
     end
 end)
 
--- Идельно круглая кнопка "G" снизу слева
 local OpenButton = Instance.new("TextButton", SG)
 OpenButton.Position = UDim2.new(0, 15, 1, -65)
 OpenButton.Size = UDim2.new(0, 45, 0, 45)
@@ -147,7 +142,6 @@ SpeedNorm.Font = Enum.Font.SourceSans
 SpeedNorm.TextSize = 13
 SpeedNorm.TextXAlignment = Enum.TextXAlignment.Left
 
--- Регулировка шага изменения КД строго по 0.1 секунды
 SpeedMinus.MouseButton1Click:Connect(function()
     if _G.SpawnSpeed > 0.1 then 
         _G.SpawnSpeed = tonumber(string.format("%.1f", _G.SpawnSpeed - 0.1))
@@ -184,7 +178,6 @@ Sm.Text = "Золото/мин: 166"
 Sm.TextColor3 = Color3.fromRGB(240, 240, 240)
 Sm.Font = Enum.Font.SourceSansBold; Sm.TextSize = 13; Sm.TextXAlignment = Enum.TextXAlignment.Left
 
--- Логика переключения АФК Фарма
 ToggleFarm.MouseButton1Click:Connect(function()
     _G.AutoFarm = not _G.AutoFarm
     ToggleFarm.BackgroundColor3 = _G.AutoFarm and Color3.fromRGB(65, 150, 65) or Color3.fromRGB(215, 85, 85)
@@ -221,7 +214,6 @@ local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
 local NormalGravity = workspace.Gravity
 
--- Функция принудительной смерти для перезапуска цикла
 _G.KillPlayer = function()
     workspace.Gravity = NormalGravity
     if LP.Character and LP.Character:FindFirstChildOfClass("Humanoid") then
@@ -240,51 +232,56 @@ end
 
 _G.ResetGravity = function() workspace.Gravity = NormalGravity end
 
--- ТОЧНАЯ ФУНКЦИЯ ФАРМА: Работает строго по путям со скриншота, выставляет гравитацию на 0, убивает на CaveStage10
+-- ГЛАВНЫЙ ИСПРАВЛЕННЫЙ ДВИЖОК: Полная пошаговая проверка сборки персонажа на спавне
 _G.StartExactCaveFarm = function()
     if not _G.AutoFarm then return end
     
+    -- Жесткое пошаговое ожидание загрузки персонажа (Предотвращает зависания потока)
     local char = LP.Character or LP.CharacterAdded:Wait()
-    local root = char:WaitForChild("HumanoidRootPart", 5)
-    local hum = char:FindFirstChildOfClass("Humanoid")
+    local root = char:WaitForChild("HumanoidRootPart", 10)
+    local hum = char:WaitForChild("Humanoid", 10)
     
     if root and hum and hum.Health > 0 then
-        -- Устанавливаем гравитацию на 0, чтобы персонаж не падал вниз во время фарма
-        workspace.Gravity = 0
+        task.wait(1.5) -- Обязательный легитный тайм-аут прогрузки на спавне базы
+        if not _G.AutoFarm then return end
+        
+        workspace.Gravity = 0 -- Невесомость
         
         local normalStages = workspace:FindFirstChild("BoatStages") and workspace.BoatStages:FindFirstChild("NormalStages")
         if normalStages then
-            -- Циклический проход строго по партам CaveStage1.DarknessPart – CaveStage10.DarknessPart
+            -- Цикл по вашему ТЗ со скриншота: CaveStage1 – CaveStage10
             for i = 1, 10 do
                 if not _G.AutoFarm then break end
                 local caveStage = normalStages:FindFirstChild("CaveStage" .. i)
                 
                 if caveStage and caveStage:FindFirstChild("DarknessPart") then
-                    -- Сбрасываем физическое ускорение тела перед телепортацией
                     root.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
                     root.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
                     
-                    -- Телепортация в парт
                     root.CFrame = caveStage.DarknessPart.CFrame
-                    
-                    -- Задерживаем персонажа в каждом парте на указанное время (по вашему ТЗ — 2 секунды)
-                    task.wait(_G.SpawnSpeed)
+                    task.wait(_G.SpawnSpeed) -- Твоя задержка КД из меню
                 end
             end
         end
         
-        -- Условие выполнения: При достижении CaveStage10.DarknessPart — убиваем персонажа
+        -- По достижении CaveStage10 — моментальный килл
         if _G.AutoFarm then
             _G.KillPlayer()
         end
     end
 end
 
--- Автоматический циклический запуск: При возрождении персонажа цикл начинается заново
-LP.CharacterAdded:Connect(function(char)
+-- ИСПРАВЛЕНО: Безопасный триггер респавна. Запускает цикл только тогда, когда старый поток полностью очищен
+if _G.CharacterConnection then _G.CharacterConnection:Disconnect() end
+_G.CharacterConnection = LP.CharacterAdded:Connect(function(char)
     if _G.AutoFarm then
-        task.wait(1.0) -- Небольшая пауза для стабильной загрузки персонажа на спавне
-        _G.StartExactCaveFarm()
+        -- Ждем, пока игра уберет заставку награды и персонаж появится на спавне базы живым
+        local hum = char:WaitForChild("Humanoid", 10)
+        if hum then
+            hum.AncestryChanged:Wait() -- Защита от запуска в мертвом состоянии
+            task.wait(1.2)
+            _G.StartExactCaveFarm()
+        end
     end
 end)
 
